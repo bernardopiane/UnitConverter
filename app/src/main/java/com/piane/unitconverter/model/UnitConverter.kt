@@ -6,6 +6,35 @@ object UnitConverter {
      * Temperature unit conversions.
      */
     object Temperature {
+
+        enum class TemperatureUnit {
+            CELSIUS,
+            FAHRENHEIT,
+            KELVIN
+        }
+
+        fun convert(value: Double, fromUnit: TemperatureUnit, toUnit: TemperatureUnit): Double {
+            return when (fromUnit) {
+                TemperatureUnit.CELSIUS -> when (toUnit) {
+                    TemperatureUnit.FAHRENHEIT -> celsiusToFahrenheit(value)
+                    TemperatureUnit.KELVIN -> celsiusToKelvin(value)
+                    TemperatureUnit.CELSIUS -> TODO()
+                }
+
+                TemperatureUnit.FAHRENHEIT -> when (toUnit) {
+                    TemperatureUnit.CELSIUS -> fahrenheitToCelsius(value)
+                    TemperatureUnit.KELVIN -> fahrenheitToKelvin(value)
+                    TemperatureUnit.FAHRENHEIT -> TODO()
+                }
+
+                TemperatureUnit.KELVIN -> when (toUnit) {
+                    TemperatureUnit.CELSIUS -> kelvinToCelsius(value)
+                    TemperatureUnit.FAHRENHEIT -> kelvinToFahrenheit(value)
+                    TemperatureUnit.KELVIN -> TODO()
+                }
+            }
+        }
+
         /**
          * Converts Celsius to Fahrenheit.
          *
@@ -71,6 +100,154 @@ object UnitConverter {
      * Distance unit conversions.
      */
     object Distance {
+
+        enum class DistanceUnit {
+            CENTIMETERS,
+            FEET,
+            INCHES,
+            METERS,
+            MILES,
+            YARDS
+        }
+
+        fun convert(value: Double, fromUnit: DistanceUnit, toUnit: DistanceUnit): Double {
+            return when (fromUnit) {
+                DistanceUnit.CENTIMETERS -> when (toUnit) {
+                    DistanceUnit.FEET -> centimetersToFeet(value)
+                    DistanceUnit.INCHES -> centimetersToInches(value)
+                    DistanceUnit.METERS -> centimetersToMeters(value)
+                    DistanceUnit.MILES -> centimetersToMiles(value)
+                    DistanceUnit.YARDS -> centimetersToYards(value)
+                    DistanceUnit.CENTIMETERS -> TODO()
+                }
+
+                DistanceUnit.FEET -> when (toUnit) {
+                    DistanceUnit.CENTIMETERS -> feetToCentimeters(value)
+                    DistanceUnit.INCHES -> feetToInches(value)
+                    DistanceUnit.METERS -> feetToMeters(value)
+                    DistanceUnit.MILES -> feetToMiles(value)
+                    DistanceUnit.YARDS -> feetToYards(value)
+                    DistanceUnit.FEET -> TODO()
+                }
+
+                DistanceUnit.INCHES -> when (toUnit) {
+                    DistanceUnit.CENTIMETERS -> inchesToCentimeters(value)
+                    DistanceUnit.FEET -> inchesToFeet(value)
+                    DistanceUnit.METERS -> inchesToMeters(value)
+                    DistanceUnit.MILES -> inchesToMiles(value)
+                    DistanceUnit.YARDS -> inchesToYards(value)
+                    DistanceUnit.INCHES -> TODO()
+                }
+
+                DistanceUnit.METERS -> when (toUnit) {
+                    DistanceUnit.CENTIMETERS -> metersToCentimeters(value)
+                    DistanceUnit.FEET -> metersToFeet(value)
+                    DistanceUnit.INCHES -> metersToInches(value)
+                    DistanceUnit.MILES -> metersToMiles(value)
+                    DistanceUnit.YARDS -> metersToYards(value)
+                    DistanceUnit.METERS -> TODO()
+                }
+
+                DistanceUnit.MILES -> when (toUnit) {
+                    DistanceUnit.CENTIMETERS -> milesToCentimeters(value)
+                    DistanceUnit.FEET -> milesToFeet(value)
+                    DistanceUnit.INCHES -> milesToInches(value)
+                    DistanceUnit.METERS -> milesToMeters(value)
+                    DistanceUnit.MILES -> TODO()
+                    DistanceUnit.YARDS -> milesToYards(value)
+                }
+
+                DistanceUnit.YARDS -> when (toUnit) {
+                    DistanceUnit.CENTIMETERS -> yardsToCentimeters(value)
+                    DistanceUnit.FEET -> yardsToFeet(value)
+                    DistanceUnit.INCHES -> yardsToInches(value)
+                    DistanceUnit.METERS -> yardsToMeters(value)
+                    DistanceUnit.MILES -> yardsToMiles(value)
+                    DistanceUnit.YARDS -> TODO()
+                }
+            }
+        }
+
+        private fun yardsToMiles(d: Double): Double {
+            return d * 0.000568182
+        }
+
+        private fun yardsToInches(d: Double): Double {
+            return d * 0.092903
+        }
+
+        private fun yardsToFeet(d: Double): Double {
+            return d * 3.0
+        }
+
+        private fun yardsToCentimeters(d: Double): Double {
+            return d * 0.9144
+        }
+
+        private fun milesToYards(d: Double): Double {
+            return d * 0.000568182
+        }
+
+        private fun milesToInches(d: Double): Double {
+            return d * 0.000621371
+        }
+
+        private fun milesToFeet(d: Double): Double {
+            return d * 5280
+        }
+
+        private fun milesToCentimeters(d: Double): Double {
+            return d * 0.000621371
+        }
+
+        private fun metersToInches(d: Double): Double {
+            return d * 39.3701
+        }
+
+        private fun metersToFeet(d: Double): Double {
+            return d * 3.28084
+        }
+
+        private fun metersToCentimeters(d: Double): Double {
+            return d * 100
+        }
+
+        private fun inchesToYards(d: Double): Double {
+            return d * 0.000568182
+        }
+
+        private fun inchesToMiles(d: Double): Double {
+            return d * 0.0000254
+        }
+
+        fun feetToYards(d: Double): Double {
+            return d * 0.0003048
+        }
+
+        fun feetToMiles(d: Double): Double {
+            return d * 0.000189394
+        }
+
+        fun feetToMeters(d: Double): Double {
+            return d * 0.3048
+        }
+
+        fun centimetersToYards(d: Double): Double {
+            return d * 0.0009144
+        }
+
+        fun centimetersToMiles(d: Double): Double {
+            return d * 0.00000621371
+        }
+
+        fun centimetersToMeters(d: Double): Double {
+            return d * 0.01
+        }
+
+        fun centimetersToInches(d: Double): Double {
+            return d * 0.393701
+        }
+
         /**
          * Converts centimeters to feet.
          *
@@ -196,6 +373,26 @@ object UnitConverter {
      * Weight unit conversions.
      */
     object Weight {
+
+        enum class WeightUnit {
+            KILOGRAMS,
+            POUNDS
+        }
+
+        fun convert(value: Double, fromUnit: WeightUnit, toUnit: WeightUnit): Double {
+            return when (fromUnit) {
+                WeightUnit.KILOGRAMS -> when (toUnit) {
+                    WeightUnit.POUNDS -> kilogramsToPounds(value)
+                    WeightUnit.KILOGRAMS -> TODO()
+                }
+
+                WeightUnit.POUNDS -> when (toUnit) {
+                    WeightUnit.KILOGRAMS -> poundsToKilograms(value)
+                    WeightUnit.POUNDS -> TODO()
+                }
+            }
+        }
+
         /**
          * Converts kilograms to pounds.
          *
