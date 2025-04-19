@@ -1,5 +1,8 @@
 package com.piane.unitconverter.model
 
+import java.math.BigDecimal
+import java.math.RoundingMode
+
 object UnitConverter {
 
     /**
@@ -7,10 +10,14 @@ object UnitConverter {
      */
     object Temperature {
 
-        enum class TemperatureUnit {
-            CELSIUS,
-            FAHRENHEIT,
-            KELVIN
+        enum class TemperatureUnit(val symbol: String) {
+            CELSIUS("°C"),
+            FAHRENHEIT("°F"),
+            KELVIN("K");
+
+            override fun toString(): String {
+                return symbol
+            }
         }
 
         fun convert(value: Double, fromUnit: TemperatureUnit, toUnit: TemperatureUnit): Double {
@@ -101,13 +108,28 @@ object UnitConverter {
      */
     object Distance {
 
-        enum class DistanceUnit {
-            CENTIMETERS,
-            FEET,
-            INCHES,
-            METERS,
-            MILES,
-            YARDS
+        enum class DistanceUnit(val symbol: String) {
+            CENTIMETERS("cm"),
+            FEET("ft"),
+            INCHES("in"),
+            METERS("m"),
+            MILES("mi"),
+            YARDS("yd");
+
+            override fun toString(): String {
+                return symbol
+            }
+        }
+
+        fun DistanceUnit.getUnitString(): String {
+            return when (this) {
+                DistanceUnit.CENTIMETERS -> "cm"
+                DistanceUnit.FEET -> "ft"
+                DistanceUnit.INCHES -> "in"
+                DistanceUnit.METERS -> "m"
+                DistanceUnit.MILES -> "mi"
+                DistanceUnit.YARDS -> "yd"
+            }
         }
 
         fun convert(value: Double, fromUnit: DistanceUnit, toUnit: DistanceUnit): Double {
@@ -374,43 +396,100 @@ object UnitConverter {
      */
     object Weight {
 
-        enum class WeightUnit {
-            KILOGRAMS,
-            POUNDS
+        /**
+         * Represents the units of weight.
+         */
+        enum class WeightUnit(val symbol: String) {
+            KILOGRAMS("kg"),
+            POUNDS("lb"),
+            OUNCES("oz");
+
+            override fun toString(): String {
+                return symbol
+            }
         }
 
+        /**
+         * Converts a weight value from one unit to another.
+         *
+         * @param value The weight value to convert.
+         * @param fromUnit The original unit of the weight.
+         * @param toUnit The desired unit of the weight.
+         * @return The converted weight value.
+         * @throws IllegalArgumentException If the conversion is invalid.
+         */
         fun convert(value: Double, fromUnit: WeightUnit, toUnit: WeightUnit): Double {
+            require(value >= 0) { "Weight value cannot be negative." }
+
+            if (fromUnit == toUnit) {
+                return value // No conversion needed if units are the same
+            }
+
             return when (fromUnit) {
                 WeightUnit.KILOGRAMS -> when (toUnit) {
                     WeightUnit.POUNDS -> kilogramsToPounds(value)
+                    WeightUnit.OUNCES -> kilogramsToOunces(value)
                     WeightUnit.KILOGRAMS -> TODO()
                 }
 
                 WeightUnit.POUNDS -> when (toUnit) {
                     WeightUnit.KILOGRAMS -> poundsToKilograms(value)
+                    WeightUnit.OUNCES -> poundsToOunces(value)
                     WeightUnit.POUNDS -> TODO()
                 }
-            }
+
+                WeightUnit.OUNCES -> when (toUnit) {
+                    WeightUnit.KILOGRAMS -> ouncesToKilograms(value)
+                    WeightUnit.POUNDS -> ouncesToPounds(value)
+                    WeightUnit.OUNCES -> TODO()
+                }
+            }.roundToTwoDecimalPlaces()
+        }
+
+        private fun poundsToOunces(d: Double): Double {
+            return d * 0.453592
+        }
+
+        private fun kilogramsToOunces(d: Double): Double {
+            return d * 0.453592
+        }
+
+        private fun ouncesToKilograms(d: Double): Double {
+            return d * 0.0283495
+        }
+
+        private fun ouncesToPounds(d: Double): Double {
+            return d * 0.0625
         }
 
         /**
-         * Converts kilograms to pounds.
+         * Converts a weight value from kilograms to pounds.
          *
-         * @param kilograms The weight in kilograms.
-         * @return The weight in pounds.
+         * @param kilograms The weight value in kilograms.
+         * @return The weight value in pounds.
          */
-        fun kilogramsToPounds(kilograms: Double): Double {
+        private fun kilogramsToPounds(kilograms: Double): Double {
             return kilograms * 2.20462
         }
 
         /**
-         * Converts pounds to kilograms.
+         * Converts a weight value from pounds to kilograms.
          *
-         * @param pounds The weight in pounds.
-         * @return The weight in kilograms.
+         * @param pounds The weight value in pounds.
+         * @return The weight value in kilograms.
          */
-        fun poundsToKilograms(pounds: Double): Double {
+        private fun poundsToKilograms(pounds: Double): Double {
             return pounds / 2.20462
+        }
+
+        /**
+         * Rounds a double value to two decimal places using BigDecimal.
+         *
+         * @param value The double value to round.
+         * @return The rounded double value.
+         */
+        private fun Double.roundToTwoDecimalPlaces(): Double {
+            return BigDecimal(this).setScale(2, RoundingMode.HALF_UP).toDouble()
         }
     }
 }

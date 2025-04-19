@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import com.piane.unitconverter.model.UnitConverter
 import com.piane.unitconverter.ui.theme.UnitConverterTheme
 import kotlin.enums.EnumEntries
-import kotlin.math.roundToLong
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -146,7 +145,7 @@ fun UnitSelector(unitOptions: EnumEntries<*>) {
             value = inputValue.toString(),
             onValueChange = {
                 inputValue =
-                    it.toDoubleOrNull() ?: 0.0;
+                    it.toDoubleOrNull() ?: 0.0
                 println("Input value changed to $inputValue")
             },
             modifier = Modifier.fillMaxWidth()
